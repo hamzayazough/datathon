@@ -5,7 +5,7 @@ import { Stock } from '../../../interfaces/stock-base.interface';
 @Component({
   selector: 'app-stock-list',
   templateUrl: './stock-list.component.html',
-  styleUrls: ['./stock-list.component.css']
+  styleUrls: ['./stock-list.component.scss'],
 })
 export class StockListComponent implements OnInit {
   stocks: Stock[] = [];
@@ -18,9 +18,11 @@ export class StockListComponent implements OnInit {
         this.stocks = data;
       },
       (error) => {
-        console.error('Erreur lors de la récupération des données de stock:', error);
+        console.error(
+          'Erreur lors de la récupération des données de stock:',
+          error
+        );
       }
     );
   }
 }
-
