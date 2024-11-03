@@ -1,7 +1,7 @@
 import json
-from s3_utils import upload_to_s3, download_from_s3
 from claude_api import analyze_stock_reports
-from stock_data import fetch_stock_data
+from stock_data import *
+from stock_analysis import make_news_prompt
 
 symbols = [
     "AAPL", "AMZN", "TSLA", "GOOGL", "MSFT", "NVDA", "META", "UNH", "JPM", "V",
@@ -11,8 +11,9 @@ symbols = [
 
 def main():
     stock_symbol = "AAPL"
-    result = analyze_stock_reports(stock_symbol)
+    # result = fetch_stock_market_cap(stock_symbol)
     # stocks_summary = fetch_stock_data(symbols)
+    result  = make_news_prompt(stock_symbol, 5)
     print(result)
 
 

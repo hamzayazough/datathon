@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from stock_data import fetch_stock_data
+from stock_data import *
 
 app = FastAPI()
 
@@ -15,5 +15,13 @@ async def get_stocks():
         stocks_summary = fetch_stock_data(symbols)
         console.log(stocks_summary)
         return stocks_summary
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/stocks/{symbol}/market-cap")
+async def get_stock(symbol: str):
+    try:
+        stock_data = fetch_stock_market_cap(symbol)
+        return stock_data
     except Exception as e:
         return {"error": str(e)}
