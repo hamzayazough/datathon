@@ -1,0 +1,146 @@
+<!-- stock-dashboard.component.html -->
+<div class="bg-gray-900 p-6 rounded-lg">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-4xl text-white font-bold">Apple</h1>
+      <h2 class="text-3xl text-white opacity-80">(AAPL)</h2>
+    </div>
+    <div class="text-green-400 text-2xl font-bold">+5.5%</div>
+  </div>
+
+  <!-- Claude's Insights Section -->
+  <div class="mb-8">
+    <h3 class="text-white text-lg mb-4">Claude's Insights</h3>
+    <div class="space-y-2">
+      <div class="bg-gray-800 p-3 rounded">
+        <p class="text-gray-300">The company seems to be missing liquidity</p>
+      </div>
+      <div class="bg-gray-800 p-3 rounded">
+        <p class="text-gray-300">The company seems to be missing liquidity</p>
+      </div>
+      <div class="bg-gray-800 p-3 rounded">
+        <p class="text-gray-300">The company seems to be missing liquidity</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stock Chart -->
+  <div class="bg-gray-800 h-48 rounded mb-8">
+    <!-- Chart placeholder - would be replaced with actual chart component -->
+    <div class="w-full h-full rounded"></div>
+  </div>
+
+  <!-- Fundamentals Section -->
+  <div class="mb-8">
+    <h3 class="text-white text-lg mb-4">Fundamentals</h3>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">200B</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">200B</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">200B</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">200B</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">200B</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">200B</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Analysis Section -->
+  <div class="mb-8">
+    <h3 class="text-white text-lg mb-4">Technical analysis</h3>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">200B</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Market Cap</p>
+        <p class="text-white">300B</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- News Sections -->
+  <div class="grid grid-cols-2 gap-8">
+    <!-- Stock News -->
+    <div>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-white text-lg">Stock News</h3>
+        <span class="text-gray-400 text-sm">23 - 30 March 2020</span>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div
+              class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center mr-3"
+            >
+              <span class="text-white text-xs">-</span>
+            </div>
+            <p class="text-gray-300">Netflix loses 500 customers</p>
+          </div>
+          <span class="text-red-500">-$280.0</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div
+              class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mr-3"
+            >
+              <span class="text-white text-xs">+</span>
+            </div>
+            <p class="text-gray-300">27 March 2020, at 15:30</p>
+          </div>
+          <span class="text-green-500">+$250</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sector News -->
+    <div>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-white text-lg">Sector News</h3>
+        <span class="text-gray-400 text-sm">23 - 30 March 2020</span>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div
+              class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center mr-3"
+            >
+              <span class="text-white text-xs">-</span>
+            </div>
+            <p class="text-gray-300">Netflix loses 500 customers</p>
+          </div>
+          <span class="text-red-500">-$250.0</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div
+              class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mr-3"
+            >
+              <span class="text-white text-xs">+</span>
+            </div>
+            <p class="text-gray-300">27 March 2020, at 15:30</p>
+          </div>
+          <span class="text-green-500">+$370</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
