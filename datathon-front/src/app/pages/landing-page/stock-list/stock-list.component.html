@@ -1,0 +1,11 @@
+<div class="stock-list">
+    <div *ngFor="let stock of stocks" class="stock-item">
+      <div class="stock-symbol">{{ stock.symbol }}</div>
+      <div class="stock-name">{{ stock.name }}</div>
+      <div class="stock-price">{{ stock.closePrice | currency:'USD' }}</div>
+      <div [style.color]="stock.dayChange >= 0 ? 'green' : 'red'">
+        {{ stock.dayChange | number:'1.2-2' }}%
+      </div>
+    </div>
+  </div>
+  
