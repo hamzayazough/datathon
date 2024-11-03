@@ -4,30 +4,59 @@ import requests
 from config import ALPHAVANTAGE_ACCESS_KEY
 
 client = boto3.client('bedrock-runtime', region_name='us-west-2')
-def fetch_news_from_alphavantage(ticker: str):
-    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={ticker}&apikey={ALPHAVANTAGE_ACCESS_KEY}"
-    response = requests.get(url)
+
+def fetch_from_alphavantage(endpoint: str, params: dict):
+    base_url = "https://www.alphavantage.co/query"
+    params["apikey"] = ALPHAVANTAGE_ACCESS_KEY
+    response = requests.get(base_url, params=params)
     
     if response.status_code == 200:
-        news_data = response.json()
-        news_list = news_data.get("feed", [])
-        
-        filtered_news = []
-        for item in news_list:
-            ticker_sentiment = item.get("ticker_sentiment", [])
-            
-            for sentiment in ticker_sentiment:
-                if sentiment["ticker"] == ticker and float(sentiment["relevance_score"]) > 0.5:
-                    filtered_news.append({
-                        "summary": item.get("summary", ""),
-                        "url": item.get("url", "")
-                    })
-                    break
-
-        return filtered_news
+        return response.json()
     else:
-        print("Error fetching news:", response.status_code)
-        return []
+        print("Error fetching data from Alphavantage:", response.status_code)
+        return {}
+
+def get_sectors_for_ticker(ticker: str):
+    params = {
+        "function": "OVERVIEW",
+        "symbol": ticker,
+    }
+    data = fetch_from_alphavantage("OVERVIEW", params)
+    return data.get("Sector", "Unknown") if data else "Unknown"
+
+def fetch_news(ticker: str = None, sector: str = None, max_articles: int = 100):
+    params = {
+        "function": "NEWS_SENTIMENT",
+        "tickers": ticker,
+        "limit": max_articles
+    }
+    if sector:
+        params["topic"] = sector
+        params.pop("tickers", None)
+    news_data = fetch_from_alphavantage("NEWS_SENTIMENT", params)
+    news_list = news_data.get("feed", [])
+    
+    filtered_news = []
+    for item in news_list:
+        ticker_sentiment = item.get("ticker_sentiment", [])
+        
+        for sentiment in ticker_sentiment:
+            if ticker and sentiment["ticker"] == ticker and float(sentiment["relevance_score"]) > 0.5:
+                filtered_news.append({
+                    "summary": item.get("summary", ""),
+                    "url": item.get("url", ""),
+                    "sentiment_score": float(sentiment.get("ticker_sentiment_score", 0))
+                })
+                break
+            elif sector and float(sentiment["relevance_score"]) > 0.2:
+                filtered_news.append({
+                    "summary": item.get("summary", ""),
+                    "url": item.get("url", ""),
+                    "sentiment_score": float(sentiment.get("ticker_sentiment_score", 0))
+                })
+                break
+
+    return filtered_news
 
 def send_to_claude(prompt, retries=3):
     for attempt in range(retries):
@@ -51,7 +80,6 @@ def send_to_claude(prompt, retries=3):
             response_body = json.loads(raw_response)
             response_text = response_body.get("content", [{}])[0].get("text", "")
             
-            # Essayez de charger la réponse textuelle comme JSON
             try:
                 response_json = json.loads(response_text)
                 return response_json
@@ -65,44 +93,30 @@ def send_to_claude(prompt, retries=3):
     print("Error: Response is not valid JSON after multiple attempts.")
     return {"error": "Response is not valid JSON"}
 
-def make_news_prompt(ticker: str, k: int):
-    news = fetch_news_from_alphavantage(ticker)
-    news_resumes = [(i, x["summary"]) for i, x in enumerate(news[:k])]
+def make_news_prompt(news, ticker_or_sector: str, max_results: int):
+    news_resumes = [(i, x["summary"], x["sentiment_score"]) for i, x in enumerate(news[:max_results])]
 
     prompt = f"""
-    You are a bot helping financial analysts. Out of the following {k} news summaries, please select the ones that are most pertinent for evaluating the stock: {ticker}.
+    You are a bot helping financial analysts. Out of the following {max_results} news summaries, please select the ones that are most pertinent for evaluating: {ticker_or_sector}.
     Return the answer as a JSON array. Each element should include:
     - "description" with a summary of the news article,
-    - "sentiment" as an integer (1 for positive, -1 for negative, 0 for neutral),
+    - "sentiment" which is the provided sentiment score,
     - "index" for the position of the article.
 
     Format each JSON object strictly as:
     [
-        {{"description": "summary of the news article", "sentiment": 1, "index": "index number"}},
+        {{"description": "summary of the news article", "sentiment": sentiment_score, "index": "index number"}},
         ...
     ]
-    Make sure the response is a well-formed JSON array with all keys and values in double quotes. Here are the article summaries: {news_resumes}
+    Here are the article summaries with sentiment scores: {news_resumes}
     """
 
-    res = send_to_claude(prompt)
-    pertinent_news = []
+    return send_to_claude(prompt)
 
-    if isinstance(res, list):
-        try:
-            pertinent_news = [
-                {
-                    "description": item["description"],
-                    "index": int(item["index"]),
-                    "sentiment": int(item.get("sentiment", 0))  # Définit 0 si "sentiment" est absent
-                }
-                for item in res
-                if "description" in item and "index" in item and str(item["index"]).isdigit()
-            ]
-        except (ValueError, TypeError, KeyError) as e:
-            print("Formatting error:", e)
-            pertinent_news = []
-    else:
-        print("Error in Claude response:", res.get("error", "Unknown error"))
+def get_filtered_news_for_ticker(ticker: str, max_results: int):
+    news = fetch_news(ticker=ticker)
+    return make_news_prompt(news, ticker, max_results)
 
-    final_news = [news[item["index"]] for item in pertinent_news if item["index"] < len(news)]
-    return final_news[:k]
+def get_filtered_news_for_sector(sector: str, max_results: int):
+    news = fetch_news(sector=sector)
+    return make_news_prompt(news, sector, max_results)
