@@ -4,6 +4,6 @@ requests
 pandas
 numpy
 python-dotenv
-yfinance 
 boto3
+yfinance
 textblob
