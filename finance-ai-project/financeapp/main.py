@@ -1,7 +1,7 @@
 import json
-from s3_utils import upload_to_s3, download_from_s3
 from claude_api import analyze_stock_reports
-from stock_data import fetch_stock_data
+from stock_data import *
+from stock_analysis import *
 
 symbols = [
     "AAPL", "AMZN", "TSLA", "GOOGL", "MSFT", "NVDA", "META", "UNH", "JPM", "V",
@@ -11,9 +11,9 @@ symbols = [
 
 def main():
     stock_symbol = "AAPL"
-    result = analyze_stock_reports(stock_symbol)
-    # stocks_summary = fetch_stock_data(symbols)
+    result  = get_filtered_news_for_sector(stock_symbol, 5)
     print(result)
+    
 
 
 if __name__ == "__main__":
