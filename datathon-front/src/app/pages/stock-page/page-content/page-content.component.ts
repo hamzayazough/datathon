@@ -3,6 +3,7 @@ import { NewsItem, StockInfo } from '../../../interfaces/stock-info.interface';
 import { dummy } from './dummy';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpRequest } from '@angular/common/http';
+import { StockService } from '../../../services/stock.service';
 @Component({
   selector: 'app-page-content',
   templateUrl: './page-content.component.html',
@@ -14,7 +15,7 @@ export class PageContentComponent implements OnInit {
   symbol: string = 'AAPL';
   serverUrl: string = 'http://127.0.0.1:8000';
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient,private stockService: StockService) {}
 
   ngOnInit() {
     //just dummy, fetch here
@@ -32,13 +33,15 @@ export class PageContentComponent implements OnInit {
     this.stockInfo.stockNews = this.http.get<NewsItem[]>(
       `${this.serverUrl}/stocks/${this.symbol}/stock-news`
     );
+    this.stockInfo.technicalInsight = this.stockService.getTAnalysis(this.symbol)
+    this.stockInfo.priceHistory = this.stockService.getHistoricData(this.symbol)
   }
 
   camelToSnakeCase(str: string) {
     return str.replace(/[A-Z]/g, (letter) => ` ${letter.toLowerCase()}`);
   }
 
-  clickEntry(str: string, source?: string) {
+  clickEntry(str: String, source?: string) {
     this.chatEmit.emit(`${str} (${source || 'no source'})`);
   }
 
