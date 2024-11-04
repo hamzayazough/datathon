@@ -75,7 +75,6 @@ async def get_stock_news(symbol: str):
 async def get_stock_news(symbol: str):
     try:
         stock_news = get_filtered_news_for_sector(symbol, 6)
-        print("Durée de l'appel")
         return {"news": stock_news}
     except Exception as e:
         return {"error": str(e)}
@@ -96,7 +95,8 @@ async def getHistory(symbol: str):
 async def get_reports_analysis(symbol: str):
     try:
         analysis = analyze_stock_reports(symbol)
-        return {"reports": analysis}
+        modified_analysis = [{"element": item["summary"], "source": item["source"]} for item in analysis]
+        return {"reports": modified_analysis}
     except Exception as e:
         return {"error": str(e)}
 

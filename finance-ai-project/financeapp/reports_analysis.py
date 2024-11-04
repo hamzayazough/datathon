@@ -57,8 +57,6 @@ def analyze_stock_reports(stock_symbol):
 
             important_elements = json.loads(json_content)
 
-            print("Résultat final en JSON :")
-            print(important_elements)
 
             return important_elements
 

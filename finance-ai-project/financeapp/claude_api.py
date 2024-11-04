@@ -16,7 +16,6 @@ def analyze_stock_reports(stock_symbol):
     try:
         existing_file = s3_client.get_object(Bucket=bucket_name, Key=s3_key)
         existing_report_summary = existing_file['Body'].read().decode('utf-8')
-        print(existing_report_summary)
         return existing_report_summary
     except ClientError as e:
         if e.response['Error']['Code'] == 'NoSuchKey':

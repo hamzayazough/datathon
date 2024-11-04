@@ -5,9 +5,7 @@ bedrock_client = boto3.client('bedrock-runtime', region_name='us-west-2')
 
 user_sessions = {}
 
-def converse_with_claude(message: str, symbol: str):
-    print(f"Conversing with Claude for symbol {symbol} with message: {message}")
-    
+def converse_with_claude(message: str, symbol: str):    
     conversation = user_sessions.get(symbol, [])
     
     message_with_context = f"{message} (Stock Symbol: {symbol})"
