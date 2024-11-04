@@ -19,6 +19,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+import { HomePageComponent } from './pages/home-page/home-page/home-page.component';
+import { StockSearchComponent } from './pages/home-page/search-bar/search-bar.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 const matModules = [
   MatSidenavModule,
   MatButtonModule,
@@ -35,8 +39,11 @@ const matModules = [
     PageContentComponent,
     ChatComponent,
     HeaderComponent,
+    HomePageComponent,
+    // SearchBarComponent,
+    StockSearchComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, ...matModules],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, ...matModules],
   providers: [provideClientHydration(), provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
