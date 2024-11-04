@@ -16,11 +16,20 @@ import { ChatComponent } from './pages/stock-page/chat/chat.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './pages/stock-page/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { HomePageComponent } from './pages/home-page/home-page/home-page.component';
 import { StockSearchComponent } from './pages/home-page/search-bar/search-bar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-const matModules = [MatSidenavModule, MatButtonModule, MatIconModule];
+const matModules = [
+  MatSidenavModule,
+  MatButtonModule,
+  MatIconModule,
+  FormsModule,
+  MatProgressSpinnerModule,
+];
 @NgModule({
   declarations: [
     AppComponent,
