@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import yfinance as yf 
 from math import isnan, isinf
 
@@ -10,10 +11,14 @@ def fetch_stock_data(symbols):
     stock_data = []
     for symbol in symbols:
         stock = yf.Ticker(symbol)
-        stock_info = stock.history(period="1d", interval="1h")
+        stock_info = stock.history(period="5d", interval="1d", actions= False)
         if not stock_info.empty:
-            close_price = sanitize_value(stock_info["Close"].iloc[-1])
-            day_change = sanitize_value(stock_info["Close"].pct_change().sum() * 100)
+            last_close = stock_info["Close"].iloc[-2] 
+            close = stock_info["Close"].iloc[-1]
+            open = stock_info["Open"].iloc[-1]
+            print(symbol,last_close, close, open)
+            close_price = sanitize_value(close)
+            day_change = sanitize_value((close - last_close) / last_close * 100)
             
             stock_data.append({
                 "symbol": symbol,
