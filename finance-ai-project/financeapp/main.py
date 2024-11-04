@@ -11,7 +11,7 @@ symbols = [
 
 def main():
     stock_symbol = "AAPL"
-    result  = get_filtered_news_for_ticker(stock_symbol, 5)
+    result  = get_filtered_news_for_sector(stock_symbol, 5)
     print(result)
     
 

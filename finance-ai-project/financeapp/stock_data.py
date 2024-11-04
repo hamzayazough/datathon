@@ -1,4 +1,10 @@
-import yfinance as yf
+import yfinance as yf 
+from math import isnan, isinf
+
+def sanitize_value(value):
+    if isnan(value) or isinf(value):
+        return None
+    return value
 
 def fetch_stock_data(symbols):
     stock_data = []
@@ -7,18 +13,17 @@ def fetch_stock_data(symbols):
         stock_info = stock.history(period="1d")
         
         if not stock_info.empty:
-            close_price = stock_info["Close"].iloc[-1]
-            day_change = stock_info["Close"].pct_change().iloc[-1] * 100
+            close_price = sanitize_value(stock_info["Close"].iloc[-1])
+            day_change = sanitize_value(stock_info["Close"].pct_change().iloc[-1] * 100)
             
             stock_data.append({
                 "symbol": symbol,
-                "name": stock.info["shortName"],
+                "name": stock.info.get("shortName", "Unknown"),
                 "closePrice": close_price,
                 "dayChange": day_change
             })
     
     return stock_data
-
 
 def fetch_stock_market_cap(symbol):
     stock = yf.Ticker(symbol)
