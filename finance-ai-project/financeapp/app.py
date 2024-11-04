@@ -10,7 +10,7 @@ app = FastAPI()
 class NewsItem(BaseModel):
     summary: str
     url: str
-    sentiment_score: Optional[float] = None
+    sentiment: Optional[float] = 0.0
 
 class StockNewsResponse(BaseModel):
     news: List[NewsItem]
@@ -44,7 +44,6 @@ async def get_stock(symbol: str):
 async def get_stock_news(symbol: str):
     try:
         stock_news = get_filtered_news_for_ticker(symbol, 6)
-        print("Durée de l'appel")
         return {"news": stock_news}
     except Exception as e:
         return {"error": str(e)}
