@@ -19,6 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HttpClientModule } from '@angular/common/http';
+import { GraphComponent } from './graph/graph/graph.component';
+import { NgChartsModule } from 'ng2-charts';
 
 import { HomePageComponent } from './pages/home-page/home-page/home-page.component';
 import { StockSearchComponent } from './pages/home-page/search-bar/search-bar.component';
@@ -29,6 +31,7 @@ const matModules = [
   MatIconModule,
   FormsModule,
   MatProgressSpinnerModule,
+  NgChartsModule,
 ];
 @NgModule({
   declarations: [
@@ -39,6 +42,7 @@ const matModules = [
     PageContentComponent,
     ChatComponent,
     HeaderComponent,
+    GraphComponent,
     HomePageComponent,
     // SearchBarComponent,
     StockSearchComponent,

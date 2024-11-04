@@ -7,6 +7,7 @@ import {
 import { dummy } from './dummy';
 import { Observable, map, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { StockService } from '../../../services/stock.service';
 import { Insight } from '../../../interfaces/insight.interface';
 import { Stock } from '../../../interfaces/stock-base.interface';
 @Component({
@@ -20,7 +21,7 @@ export class PageContentComponent implements OnInit {
   symbol: string = 'AAPL';
   serverUrl: string = 'http://127.0.0.1:8000';
 
-  constructor(private http: HttpClient) {}
+  constructor(public http: HttpClient, private stockService: StockService) {}
 
   ngOnInit() {
     //just dummy, fetch here
@@ -34,45 +35,23 @@ export class PageContentComponent implements OnInit {
       });
     } */
 
-    this.stockInfo.stockNews = this.http
-      .get<{ news: NewsItem[] }>(
-        `${this.serverUrl}/stocks/${this.symbol}/stock-news`
-      )
-      .pipe(map((x) => x.news))
-      .pipe(take(1));
-
-    this.stockInfo.sectorNews = this.http
-      .get<{ news: NewsItem[] }>(
-        `${this.serverUrl}/stocks/${this.symbol}/sector-news`
-      )
-      .pipe(map((x) => x.news))
-      .pipe(take(1));
-
-    this.stockInfo.generalInsights = this.http
-      .get<{ reports: Insight[] }>(
-        `${this.serverUrl}/stocks/${this.symbol}/reports-analysis`
-      )
-      .pipe(map((x) => x.reports))
-      .pipe(take(1));
-
-    this.stockInfo.fundamentalData = this.http
-      .get<FundamentalData>(
-        `${this.serverUrl}/stocks/${this.symbol}/market-cap`
-      )
-      .pipe(take(1));
-
-    this.stockInfo.stock = this.http
-      .get<Stock[]>(`${this.serverUrl}/stocks`)
-      .pipe(
-        map((x) => x.find((x) => x.symbol === this.symbol))
-      ) as Observable<Stock>;
+    this.stockInfo = {} as StockInfo;
+    this.stockInfo.stockNews = this.http.get<NewsItem[]>(
+      `${this.serverUrl}/stocks/${this.symbol}/stock-news`
+    );
+    this.stockInfo.technicalInsight = this.stockService.getTAnalysis(
+      this.symbol
+    );
+    this.stockInfo.priceHistory = this.stockService.getHistoricData(
+      this.symbol
+    );
   }
 
   camelToSnakeCase(str: string) {
     return str.replace(/[A-Z]/g, (letter) => ` ${letter.toLowerCase()}`);
   }
 
-  clickEntry(str: string, source?: string) {
+  clickEntry(str: String, source?: string) {
     this.chatEmit.emit(`${str} (${source || 'no source'})`);
   }
 
