@@ -18,7 +18,6 @@ app.add_middleware(
 )
 
 class ConverseRequest(BaseModel):
-    user_id: str
     message: str
 
 class NewsItem(BaseModel):
@@ -91,8 +90,8 @@ async def get_reports_analysis(symbol: str):
     except Exception as e:
         return {"error": str(e)}
 
-# pas fonctionnel
+# fonctionnel
 @app.post("/converse/{symbol}")
 async def converse_route(symbol: str, request: ConverseRequest):
-    response = converse_with_claude(request.user_id, request.message, symbol)
+    response = converse_with_claude(request.message, symbol)
     return response
