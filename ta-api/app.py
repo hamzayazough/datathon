@@ -1,8 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from stock import *
-
+from fastapi.middleware.cors import CORSMiddleware from
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, PUT, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 @app.get('/historic/')
 async def historic(ticker:  str = '', period: str = '1y'):

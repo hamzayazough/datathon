@@ -6,11 +6,19 @@ import (
 	"godatatthon/Services/LLMService"
 	"godatatthon/Services/S3Service"
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 const PORT = ":8080"
 
 func AddRoutes(mux *http.ServeMux) {
+	cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
+	}).Handler(mux)
 	mux.HandleFunc("GET /ask/{ticker}", Handler.AskByTicker)
 }
 
