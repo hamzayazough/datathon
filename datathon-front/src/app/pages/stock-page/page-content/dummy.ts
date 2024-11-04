@@ -13,12 +13,12 @@ export const dummy: any = {
     {
       summary: 'Apple announces new iPhone release date',
       url: 'https://example.com/apple-iphone-news',
-      sentiment_score: 0.8,
+      sentiment: 0.8,
     },
     {
       summary: "Apple's services revenue hits all-time high",
       url: 'https://example.com/apple-services-revenue',
-      sentiment_score: 0.9,
+      sentiment: 0.9,
     },
   ],
 
@@ -27,12 +27,12 @@ export const dummy: any = {
     {
       summary: 'Tech sector shows strong growth in Q2',
       url: 'https://example.com/tech-sector-q2',
-      sentiment_score: 0.7,
+      sentiment: 0.7,
     },
     {
       summary: 'Semiconductor shortage affecting tech industry',
       url: 'https://example.com/semiconductor-shortage',
-      sentiment_score: -0.3,
+      sentiment: -0.3,
     },
   ],
 
