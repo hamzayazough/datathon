@@ -3,17 +3,35 @@ from typing import List, Optional
 from fastapi import FastAPI
 from stock_data import *
 from stock_analysis import *
+from fastapi.middleware.cors import CORSMiddlewarefrom reports_analysis import *
 
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, PUT, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+
 class NewsItem(BaseModel):
     summary: str
     url: str
-    sentiment_score: Optional[float] = None
+    sentiment: Optional[float] = 0.0
 
 class StockNewsResponse(BaseModel):
     news: List[NewsItem]
+
+
+class ReportItem(BaseModel):
+    element: str
+    source: str
+
+class ReportsAnalysisResponse(BaseModel):
+    reports: List[ReportItem]
+
 
 symbols = [
     "AAPL", "AMZN", "TSLA", "GOOGL", "MSFT", "NVDA", "META", "MDGL", "JPM", "V",
@@ -44,7 +62,6 @@ async def get_stock(symbol: str):
 async def get_stock_news(symbol: str):
     try:
         stock_news = get_filtered_news_for_ticker(symbol, 6)
-        print("Durée de l'appel")
         return {"news": stock_news}
     except Exception as e:
         return {"error": str(e)}
@@ -56,5 +73,14 @@ async def get_stock_news(symbol: str):
         stock_news = get_filtered_news_for_sector(symbol, 6)
         print("Durée de l'appel")
         return {"news": stock_news}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/stocks/{symbol}/reports-analysis", response_model=ReportsAnalysisResponse)
+async def get_reports_analysis(symbol: str):
+    try:
+        analysis = analyze_stock_reports(symbol)
+        return {"reports": analysis}
     except Exception as e:
         return {"error": str(e)}

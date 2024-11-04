@@ -21,6 +21,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GraphComponent } from './graph/graph/graph.component';
 import { NgChartsModule } from 'ng2-charts';
 
+import { HomePageComponent } from './pages/home-page/home-page/home-page.component';
+import { StockSearchComponent } from './pages/home-page/search-bar/search-bar.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 const matModules = [
   MatSidenavModule,
   MatButtonModule,
@@ -39,8 +43,11 @@ const matModules = [
     ChatComponent,
     HeaderComponent,
     GraphComponent,
+    HomePageComponent,
+    // SearchBarComponent,
+    StockSearchComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, ...matModules],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, ...matModules],
   providers: [provideClientHydration(), provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })

@@ -1,5 +1,5 @@
 import json
-from claude_api import analyze_stock_reports
+from reports_analysis import analyze_stock_reports
 from stock_data import *
 from stock_analysis import *
 
@@ -10,11 +10,10 @@ symbols = [
 ]
 
 def main():
-    stock_symbol = "AAPL"
-    result  = get_filtered_news_for_sector(stock_symbol, 5)
+    stock_symbol = "TSLA"
+    result  = analyze_stock_reports(stock_symbol)
     print(result)
     
-
 
 if __name__ == "__main__":
     main()

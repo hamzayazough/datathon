@@ -1,7 +1,7 @@
 import { Stock } from './stock-base.interface';
 import { Insight } from './insight.interface';
 import { Observable } from 'rxjs';
-interface FundamentalData {
+export interface FundamentalData {
   shortName?: string;
   sector?: string;
   industry?: string;
@@ -19,10 +19,10 @@ interface FundamentalData {
   priceToBook?: number;
 }
 
-interface NewsItem {
+export interface NewsItem {
   summary: string;
   url: string;
-  sentiment_score: number;
+  sentiment: number;
 }
 
 export interface StockInfo {

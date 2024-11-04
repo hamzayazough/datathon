@@ -139,11 +139,11 @@ def make_news_prompt(news, ticker_or_sector: str, max_results: int):
     if isinstance(response, list):
         response_with_sentiment = []
         for item in response:
-            sentiment_score = TextBlob(item.summary).sentiment.polarity
+            sentimentScore = TextBlob(item.summary).sentiment.polarity
             response_with_sentiment.append({
                 "summary": item.summary,
                 "url": item.url,
-                "sentiment": sentiment_score
+                "sentiment": sentimentScore
             })
         return response_with_sentiment
 
@@ -154,6 +154,7 @@ def make_news_prompt(news, ticker_or_sector: str, max_results: int):
 def get_filtered_news_for_ticker(ticker: str, max_results: int):
     news = fetch_stock_news(ticker=ticker)
     return make_news_prompt(news, ticker, max_results)
+    
 
 def get_filtered_news_for_sector(sector: str, max_results: int):
     news = fetch_sector_news(sector)
