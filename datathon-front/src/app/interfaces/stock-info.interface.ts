@@ -29,7 +29,7 @@ export interface StockInfo {
   stock: Observable<Stock>; //Hamza
   stockNews: Observable<NewsItem[]>; //Hamza
   sectorNews: Observable<NewsItem[]>; //Hamza
-  technicalInsight: Observable<string>; //Luckas
+  technicalInsight: Observable<String>; //Luckas
   generalInsights: Observable<Insight[]>; // Hamza
   priceHistory: Observable<any>; // Luckas
   fundamentalData: Observable<FundamentalData>; //Hamza
