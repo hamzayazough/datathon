@@ -18,6 +18,7 @@ import { HeaderComponent } from './pages/stock-page/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HttpClientModule } from '@angular/common/http';
 
 const matModules = [
   MatSidenavModule,
@@ -36,7 +37,7 @@ const matModules = [
     ChatComponent,
     HeaderComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ...matModules],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ...matModules],
   providers: [provideClientHydration(), provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
