@@ -3,8 +3,9 @@ from typing import List, Optional
 from fastapi import FastAPI
 from stock_data import *
 from stock_analysis import *
-from fastapi.middleware.cors import CORSMiddlewarefrom reports_analysis import *
-
+from fastapi.middleware.cors import CORSMiddleware
+from reports_analysis import *
+from chat_bot import converse_with_claude
 
 app = FastAPI()
 
@@ -15,6 +16,10 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods (GET, POST, PUT, etc.)
     allow_headers=["*"],  # Allows all headers
 )
+
+class ConverseRequest(BaseModel):
+    user_id: str
+    message: str
 
 class NewsItem(BaseModel):
     summary: str
@@ -77,6 +82,7 @@ async def get_stock_news(symbol: str):
         return {"error": str(e)}
 
 
+# fonctionnel
 @app.get("/stocks/{symbol}/reports-analysis", response_model=ReportsAnalysisResponse)
 async def get_reports_analysis(symbol: str):
     try:
@@ -84,3 +90,9 @@ async def get_reports_analysis(symbol: str):
         return {"reports": analysis}
     except Exception as e:
         return {"error": str(e)}
+
+# pas fonctionnel
+@app.post("/converse/{symbol}")
+async def converse_route(symbol: str, request: ConverseRequest):
+    response = converse_with_claude(request.user_id, request.message, symbol)
+    return response
