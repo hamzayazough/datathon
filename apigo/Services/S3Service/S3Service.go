@@ -20,7 +20,7 @@ var client *s3.Client
 var cfg aws.Config
 var uploader *manager.Uploader
 
-const BUCKET_NAME = "hackathon-storage"
+const BUCKET_NAME = "taindiractors"
 const FOLDER = "TA/"
 
 func Setup() {
