@@ -10,11 +10,10 @@ def fetch_stock_data(symbols):
     stock_data = []
     for symbol in symbols:
         stock = yf.Ticker(symbol)
-        stock_info = stock.history(period="1d")
-        
+        stock_info = stock.history(period="1d", interval="1h")
         if not stock_info.empty:
             close_price = sanitize_value(stock_info["Close"].iloc[-1])
-            day_change = sanitize_value(stock_info["Close"].pct_change().iloc[-1] * 100)
+            day_change = sanitize_value(stock_info["Close"].pct_change().sum() * 100)
             
             stock_data.append({
                 "symbol": symbol,
@@ -24,6 +23,7 @@ def fetch_stock_data(symbols):
             })
     
     return stock_data
+
 
 def fetch_stock_market_cap(symbol):
     stock = yf.Ticker(symbol)

@@ -16,6 +16,10 @@ import { ChatComponent } from './pages/stock-page/chat/chat.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './pages/stock-page/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
+import { HomePageComponent } from './pages/home-page/home-page/home-page.component';
+import { StockSearchComponent } from './pages/home-page/search-bar/search-bar.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 const matModules = [MatSidenavModule, MatButtonModule, MatIconModule];
 @NgModule({
   declarations: [
@@ -26,8 +30,11 @@ const matModules = [MatSidenavModule, MatButtonModule, MatIconModule];
     PageContentComponent,
     ChatComponent,
     HeaderComponent,
+    HomePageComponent,
+    // SearchBarComponent,
+    StockSearchComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, ...matModules],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, ...matModules],
   providers: [provideClientHydration(), provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
