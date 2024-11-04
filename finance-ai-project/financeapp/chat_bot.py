@@ -1,13 +1,36 @@
 import boto3
+import json
 
-client = boto3.client('bedrock-agent-runtime', region_name='us-west-2')
-messages = []
+bedrock_client = boto3.client('bedrock-runtime', region_name='us-west-2')
 
-def chat(msg):
-    messages.append({"text": msg})
-    res = client.converse(modelId="anthropic.claude-3-sonnet-20240229-v1:0",
-        messages=[{"role": "user", "content": messages}],
+user_sessions = {}
+
+def converse_with_claude(message: str, symbol: str):
+    print(f"Conversing with Claude for symbol {symbol} with message: {message}")
+    
+    conversation = user_sessions.get(symbol, [])
+    
+    message_with_context = f"{message} (Stock Symbol: {symbol})"
+    conversation.append({"role": "user", "content": message_with_context})
+
+    messages_payload = [{"role": msg["role"], "content": [{"text": msg["content"]}]} for msg in conversation]
+
+    try:
+        response = bedrock_client.converse(
+            modelId="anthropic.claude-3-sonnet-20240229-v1:0",
+            messages=messages_payload,
+            inferenceConfig={
+                "maxTokens": 1000,
+                "temperature": 0.5,
+            }
         )
-    messages.append(res['output']['message']['content'][-1])
-    return res['output']['message']['content']
 
+        response_content = response["output"]["message"]["content"][0]["text"]
+        conversation.append({"role": "assistant", "content": response_content})
+
+        user_sessions[symbol] = conversation
+
+        return {"response": response_content, "conversation": conversation}
+    
+    except Exception as e:
+        return {"error": str(e)}
