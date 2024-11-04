@@ -10,8 +10,8 @@ symbols = [
 ]
 
 def main():
-    stock_symbol = "AAPL"
-    result  = get_filtered_news_for_sector(stock_symbol, 5)
+    stock_symbol = "AMZN"
+    result  = analyze_stock_reports(stock_symbol)
     print(result)
     
 
