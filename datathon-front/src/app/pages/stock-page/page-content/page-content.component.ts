@@ -11,6 +11,7 @@ import { StockService } from '../../../services/stock.service';
 import { Insight } from '../../../interfaces/insight.interface';
 import { Stock } from '../../../interfaces/stock-base.interface';
 import { ActivatedRoute } from '@angular/router';
+import { FundamentalsService } from '../../../services/fundamentals.service';
 @Component({
   selector: 'app-page-content',
   templateUrl: './page-content.component.html',
@@ -25,7 +26,8 @@ export class PageContentComponent implements OnInit {
   constructor(
     public http: HttpClient,
     private stockService: StockService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private fund: FundamentalsService
   ) {}
 
   ngOnInit() {
@@ -35,12 +37,13 @@ export class PageContentComponent implements OnInit {
     this.stockInfo.stockNews = this.http.get<NewsItem[]>(
       `${this.serverUrl}/stocks/${this.symbol}/stock-news`
     );
-    this.stockInfo.technicalInsight = this.stockService.getTAnalysis(
-      this.symbol
-    );
-    this.stockInfo.priceHistory = this.stockService.getHistoricData(
-      this.symbol
-    );
+    this.stockInfo.technicalInsight = this.http
+      .get<string>(`${this.serverUrl}/ask/${this.symbol}`)
+      .pipe(take(1));
+
+    this.stockInfo.priceHistory = this.http
+      .get<string>(`${this.serverUrl}/historic/${this.symbol}`)
+      .pipe(take(1));
 
     this.stockInfo.stockNews = this.http
       .get<{ news: NewsItem[] }>(
@@ -69,8 +72,8 @@ export class PageContentComponent implements OnInit {
       )
       .pipe(take(1));
 
-    this.stockInfo.stock = this.http
-      .get<Stock[]>(`${this.serverUrl}/stocks`)
+    this.stockInfo.stock = this.fund
+      .getAllTickers()
       .pipe(
         map((x) => x.find((x) => x.symbol === this.symbol))
       ) as Observable<Stock>;

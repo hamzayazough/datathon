@@ -1,8 +1,9 @@
-<div class="text-white">
-    <canvas baseChart
-            [data]="data"
-            [options]="chartOptions"
-            [plugins]="chartPlugins"
-            [type]="chartType">
-    </canvas>
+<div class="chart-container" style="height: 400px">
+  <canvas
+    baseChart
+    [type]="lineChartType"
+    [data]="lineChartData"
+    [options]="lineChartOptions"
+  >
+  </canvas>
 </div>

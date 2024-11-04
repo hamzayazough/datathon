@@ -16,11 +16,12 @@
     <div
       class="text-2xl font-bold"
       [ngClass]="{
-        'text-green-400': obs.closePrice > 0,
-        'text-red-400': obs.closePrice < 0
+        'text-green-400': obs.dayChange > 0,
+        'text-red-400': obs.dayChange < 0
       }"
     >
-      {{ obs.closePrice >= 0 ? "+" : "-" }}{{ obs.closePrice }}%
+      {{ obs.dayChange >= 0 ? "+" : ""
+      }}{{ obs.dayChange.toString().slice(0, 7) }}%
     </div>
   </div>
   <ng-template #loadingName>
@@ -54,11 +55,10 @@
     </ng-template>
   </div>
 
-  <div class="bg-gray-800 h-48 rounded mb-8">
+  <div class="bg-gray-800 h-250 rounded mb-8">
     <div class="w-full h-full rounded">
-      <app-graph></app-graph>
+      <app-graph [data]="stockInfo?.priceHistory"></app-graph>
     </div>
-    
   </div>
 
   <div class="mb-8">

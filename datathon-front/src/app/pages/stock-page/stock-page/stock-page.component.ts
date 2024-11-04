@@ -18,7 +18,7 @@ export class StockPageComponent {
   handleChatEmit(query: string) {
     this.sidenav.open();
     const message: Message = {
-      query: `please tell me more about this : ${query}`,
+      query: `please tell me more about this and explain it thoroughly: ${query}`,
       special: true,
       text: `Referenced an element (${query})`,
     };

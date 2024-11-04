@@ -30,7 +30,7 @@ def converse_with_claude(message: str, symbol: str):
 
         user_sessions[symbol] = conversation
 
-        return {"response": response_content, "conversation": conversation}
+        return {"response": response_content}
     
     except Exception as e:
         return {"error": str(e)}

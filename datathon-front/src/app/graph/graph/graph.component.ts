@@ -1,49 +1,85 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartConfiguration } from 'chart.js/auto';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
-  styleUrls: ['./graph.component.scss']
+  styleUrls: ['./graph.component.scss'],
 })
 export class GraphComponent implements OnInit {
-  constructor() { }
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  @Input() data: any;
 
-  public data: ChartConfiguration<'line'>['data'] = {
+  public lineChartData: ChartConfiguration<'line'>['data'] = {
+    labels: [],
     datasets: [
       {
-        label: "Sales",
-        data: [467, 576, 572, 79, 92, 574, 573, 576],
-        backgroundColor: 'blue'
+        data: [],
+        label: 'Close price',
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
       },
-    ]
+    ],
   };
 
-  public chartType: ChartConfiguration<'line'>['type'] = 'line';
-
-  public chartOptions: ChartConfiguration<'line'>['options'] = {
+  public lineChartOptions: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio: !false,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Price',
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Month',
+        },
+      },
+    },
   };
 
-  public chartPlugins = [];
+  public lineChartType: ChartConfiguration<'line'>['type'] = 'line';
+
+  constructor() {}
 
   ngOnInit(): void {
-    // this.createChart();
+    this.data.subscribe((res: any) => {
+      console.log(res.Close);
+      this.updateChartData(Object.values(res.Close), Object.keys(res.Close));
+      this.updateChart();
+    });
   }
 
-  public chart: any;
+  private updateChart(): void {
+    if (this.chart?.chart) {
+      this.chart.chart.update();
+    }
+  }
 
-  createChart(): void {
-    this.data = {
-      datasets: [
-        {
-          label: "Sales",
-          data: [467, 576, 572, 79, 92, 574, 573, 576],
-          backgroundColor: 'blue'
-        },
-      ]
-    } as ChartConfiguration<'line'>['data'];
+  // Optional: Method to update data dynamically
+  public updateChartData(newData: number[], newKeys: string[]): void {
+    console.log(newData);
+    this.lineChartData.labels = newKeys.map((x) =>
+      new Date(parseInt(x)).toLocaleDateString()
+    );
+    this.lineChartData.datasets[0].data = newData;
+    this.updateChart();
   }
 }

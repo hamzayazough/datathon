@@ -79,7 +79,17 @@ async def get_stock_news(symbol: str):
         return {"news": stock_news}
     except Exception as e:
         return {"error": str(e)}
+    
+@app.get("/ask/{symbol}")
+async def askTA(symbol: str):
+    response = requests.get(f"http://34.219.130.61:57/ask/{symbol}")
+    return response.content
 
+
+@app.get("/historic/{symbol}")
+async def getHistory(symbol: str):
+    response = requests.get(f"http://34.219.130.61/historic/?ticker={symbol}")
+    return json.loads(response.content)
 
 # fonctionnel
 @app.get("/stocks/{symbol}/reports-analysis", response_model=ReportsAnalysisResponse)
