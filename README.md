@@ -1,5 +1,6 @@
 # datathon
-datathon project
+datathon project team #7
+![image](https://github.com/user-attachments/assets/b24b4772-c6e7-4e63-8820-42b1b77791d3)
 
 
 # Installation:
