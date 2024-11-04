@@ -115,7 +115,6 @@ def send_to_claude(prompt, retries=3):
     return {"error": "Response is not valid JSON"}
 
 
-
 def make_news_prompt(news, ticker_or_sector: str, max_results: int):
     news_resumes = [{"summary": x["summary"], "url": x["url"]} for x in news[:max_results]]
 

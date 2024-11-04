@@ -10,7 +10,7 @@ symbols = [
 ]
 
 def main():
-    stock_symbol = "TSLA"
+    stock_symbol = "MSFT"
     result  = analyze_stock_reports(stock_symbol)
     print(result)
     
