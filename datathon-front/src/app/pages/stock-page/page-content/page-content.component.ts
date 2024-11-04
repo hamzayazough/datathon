@@ -4,7 +4,6 @@ import {
   NewsItem,
   StockInfo,
 } from '../../../interfaces/stock-info.interface';
-import { dummy } from './dummy';
 import { Observable, map, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { StockService } from '../../../services/stock.service';
