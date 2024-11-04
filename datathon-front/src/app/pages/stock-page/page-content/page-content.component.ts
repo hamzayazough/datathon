@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { StockService } from '../../../services/stock.service';
 import { Insight } from '../../../interfaces/insight.interface';
 import { Stock } from '../../../interfaces/stock-base.interface';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-page-content',
   templateUrl: './page-content.component.html',
@@ -18,24 +19,19 @@ import { Stock } from '../../../interfaces/stock-base.interface';
 export class PageContentComponent implements OnInit {
   stockInfo?: StockInfo;
   @Output() chatEmit: EventEmitter<string> = new EventEmitter<string>();
-  symbol: string = 'AAPL';
+  symbol: string = '';
   serverUrl: string = 'http://127.0.0.1:8000';
 
-  constructor(public http: HttpClient, private stockService: StockService) {}
+  constructor(
+    public http: HttpClient,
+    private stockService: StockService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    //just dummy, fetch here
+    this.symbol = this.activatedRoute.snapshot.params['ticker'];
     this.stockInfo = {} as StockInfo;
-    /* for (let [index, element] of Object.keys(dummy).entries()) {
-      (this.stockInfo as any)[element] = new Observable((subscriber) => {
-        setTimeout(() => {
-          subscriber.next((dummy as any)[element]);
-          subscriber.complete();
-        }, index * 1000);
-      });
-    } */
 
-    this.stockInfo = {} as StockInfo;
     this.stockInfo.stockNews = this.http.get<NewsItem[]>(
       `${this.serverUrl}/stocks/${this.symbol}/stock-news`
     );
@@ -45,6 +41,39 @@ export class PageContentComponent implements OnInit {
     this.stockInfo.priceHistory = this.stockService.getHistoricData(
       this.symbol
     );
+
+    this.stockInfo.stockNews = this.http
+      .get<{ news: NewsItem[] }>(
+        `${this.serverUrl}/stocks/${this.symbol}/stock-news`
+      )
+      .pipe(map((x) => x.news))
+      .pipe(take(1));
+
+    this.stockInfo.sectorNews = this.http
+      .get<{ news: NewsItem[] }>(
+        `${this.serverUrl}/stocks/${this.symbol}/sector-news`
+      )
+      .pipe(map((x) => x.news))
+      .pipe(take(1));
+
+    this.stockInfo.generalInsights = this.http
+      .get<{ reports: Insight[] }>(
+        `${this.serverUrl}/stocks/${this.symbol}/reports-analysis`
+      )
+      .pipe(map((x) => x.reports))
+      .pipe(take(1));
+
+    this.stockInfo.fundamentalData = this.http
+      .get<FundamentalData>(
+        `${this.serverUrl}/stocks/${this.symbol}/market-cap`
+      )
+      .pipe(take(1));
+
+    this.stockInfo.stock = this.http
+      .get<Stock[]>(`${this.serverUrl}/stocks`)
+      .pipe(
+        map((x) => x.find((x) => x.symbol === this.symbol))
+      ) as Observable<Stock>;
   }
 
   camelToSnakeCase(str: string) {
