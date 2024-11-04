@@ -23,7 +23,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomePageComponent } from './pages/home-page/home-page/home-page.component';
 import { StockSearchComponent } from './pages/home-page/search-bar/search-bar.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 const matModules = [
   MatSidenavModule,
   MatButtonModule,
@@ -48,7 +47,6 @@ const matModules = [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule,
     HttpClientModule,
     ...matModules,
   ],

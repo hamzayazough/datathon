@@ -40,9 +40,9 @@
         <div
           class="bg-gray-800 p-3 rounded flex flex-row cursor-pointer"
           *ngFor="let insight of insights"
-          (click)="clickEntry(insight.text, insight.source)"
+          (click)="clickEntry(insight.element, insight.source)"
         >
-          <p class="text-gray-300 p-1">{{ insight.text }}</p>
+          <p class="text-gray-300 p-1">{{ insight.element }}</p>
           <a [href]="insight.source" class="text-gray-500 p-1"
             >({{ insight.source }})</a
           >
