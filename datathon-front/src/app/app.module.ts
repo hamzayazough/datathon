@@ -18,6 +18,8 @@ import { HeaderComponent } from './pages/stock-page/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { GraphComponent } from './graph/graph/graph.component';
+import { NgChartsModule } from 'ng2-charts';
 
 const matModules = [
   MatSidenavModule,
@@ -25,6 +27,7 @@ const matModules = [
   MatIconModule,
   FormsModule,
   MatProgressSpinnerModule,
+  NgChartsModule
 ];
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ const matModules = [
     PageContentComponent,
     ChatComponent,
     HeaderComponent,
+    GraphComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ...matModules],
   providers: [provideClientHydration(), provideAnimationsAsync()],
