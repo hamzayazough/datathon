@@ -16,7 +16,16 @@ import { ChatComponent } from './pages/stock-page/chat/chat.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './pages/stock-page/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
-const matModules = [MatSidenavModule, MatButtonModule, MatIconModule];
+import { FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+const matModules = [
+  MatSidenavModule,
+  MatButtonModule,
+  MatIconModule,
+  FormsModule,
+  MatProgressSpinnerModule,
+];
 @NgModule({
   declarations: [
     AppComponent,

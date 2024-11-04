@@ -3,10 +3,10 @@
 <div class="h-16"></div>
 <mat-sidenav-container>
   <mat-sidenav mode="side" #sidenav [fixedInViewport]="true" [fixedTopGap]="64">
-    <app-chat></app-chat>
+    <app-chat #chat></app-chat>
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-page-content></app-page-content>
+    <app-page-content (chatEmit)="handleChatEmit($event)"></app-page-content>
   </mat-sidenav-content>
   ></mat-sidenav-container
 >

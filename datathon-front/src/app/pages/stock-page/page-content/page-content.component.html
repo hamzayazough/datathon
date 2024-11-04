@@ -1,146 +1,179 @@
 <!-- stock-dashboard.component.html -->
-<div class="bg-gray-900 p-6 rounded-lg">
+
+<div class="bg-gray-900 p-6">
   <!-- Header Section -->
-  <div class="flex justify-between items-center mb-8">
+  <div
+    class="flex justify-between items-center mb-8"
+    *ngIf="stockInfo?.stock | async as obs; else loadingName"
+  >
     <div>
-      <h1 class="text-4xl text-white font-bold">Apple</h1>
-      <h2 class="text-3xl text-white opacity-80">(AAPL)</h2>
+      <h1 class="text-4xl text-white font-bold">
+        {{ obs.name }}
+      </h1>
+
+      <h2 class="text-3xl text-white opacity-80">({{ obs.symbol }})</h2>
     </div>
-    <div class="text-green-400 text-2xl font-bold">+5.5%</div>
+    <div
+      class="text-2xl font-bold"
+      [ngClass]="{
+        'text-green-400': obs.closePrice > 0,
+        'text-red-400': obs.closePrice < 0
+      }"
+    >
+      {{ obs.closePrice >= 0 ? "+" : "-" }}{{ obs.closePrice }}%
+    </div>
   </div>
+  <ng-template #loadingName>
+    <mat-spinner></mat-spinner>
+  </ng-template>
 
   <!-- Claude's Insights Section -->
   <div class="mb-8">
     <h3 class="text-white text-lg mb-4">Claude's Insights</h3>
-    <div class="space-y-2">
-      <div class="bg-gray-800 p-3 rounded">
-        <p class="text-gray-300">The company seems to be missing liquidity</p>
+    <ng-container
+      *ngIf="
+        stockInfo?.generalInsights | async as insights;
+        else loadingInsight
+      "
+    >
+      <div class="space-y-2">
+        <div
+          class="bg-gray-800 p-3 rounded flex flex-row cursor-pointer"
+          *ngFor="let insight of insights"
+          (click)="clickEntry(insight.text, insight.source)"
+        >
+          <p class="text-gray-300 p-1">{{ insight.text }}</p>
+          <a [href]="insight.source" class="text-gray-500 p-1"
+            >({{ insight.source }})</a
+          >
+        </div>
       </div>
-      <div class="bg-gray-800 p-3 rounded">
-        <p class="text-gray-300">The company seems to be missing liquidity</p>
-      </div>
-      <div class="bg-gray-800 p-3 rounded">
-        <p class="text-gray-300">The company seems to be missing liquidity</p>
-      </div>
-    </div>
+    </ng-container>
+    <ng-template #loadingInsight>
+      <mat-spinner></mat-spinner>
+    </ng-template>
   </div>
 
-  <!-- Stock Chart -->
   <div class="bg-gray-800 h-48 rounded mb-8">
-    <!-- Chart placeholder - would be replaced with actual chart component -->
     <div class="w-full h-full rounded"></div>
   </div>
 
-  <!-- Fundamentals Section -->
   <div class="mb-8">
     <h3 class="text-white text-lg mb-4">Fundamentals</h3>
-    <div class="grid grid-cols-3 gap-4">
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">200B</p>
+    <ng-container
+      *ngIf="
+        stockInfo?.fundamentalData | async as fundamentals;
+        else loadingInsight
+      "
+    >
+      <div class="grid grid-cols-3 gap-4">
+        <div
+          class="bg-gray-800 p-4 rounded cursor-pointer"
+          *ngFor="let fund of getEntries(fundamentals)"
+          (click)="clickEntry(fund[0])"
+        >
+          <p class="text-gray-400 text-sm">{{ fund[0] }}</p>
+          <p class="text-white">{{ fund[1] }}</p>
+        </div>
       </div>
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">200B</p>
-      </div>
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">200B</p>
-      </div>
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">200B</p>
-      </div>
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">200B</p>
-      </div>
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">200B</p>
-      </div>
-    </div>
+    </ng-container>
+    <ng-template #loadingInsight>
+      <mat-spinner></mat-spinner>
+    </ng-template>
   </div>
 
-  <!-- Technical Analysis Section -->
   <div class="mb-8">
     <h3 class="text-white text-lg mb-4">Technical analysis</h3>
-    <div class="grid grid-cols-2 gap-4">
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">200B</p>
+    <ng-container
+      *ngIf="
+        stockInfo?.technicalInsight | async as technicalInsight;
+        else loadingInsight
+      "
+    >
+      <div
+        class="grid grid-cols-1 gap-4 cursor-pointer"
+        (click)="clickEntry(technicalInsight)"
+      >
+        <div class="bg-gray-800 p-4 rounded">
+          <p class="text-white">{{ technicalInsight }}</p>
+        </div>
       </div>
-      <div class="bg-gray-800 p-4 rounded">
-        <p class="text-gray-400 text-sm">Market Cap</p>
-        <p class="text-white">300B</p>
-      </div>
-    </div>
+    </ng-container>
+    <ng-template #loadingInsight>
+      <mat-spinner></mat-spinner>
+    </ng-template>
   </div>
 
-  <!-- News Sections -->
   <div class="grid grid-cols-2 gap-8">
-    <!-- Stock News -->
     <div>
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-white text-lg">Stock News</h3>
-        <span class="text-gray-400 text-sm">23 - 30 March 2020</span>
       </div>
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center mr-3"
-            >
-              <span class="text-white text-xs">-</span>
+      <ng-container
+        *ngIf="stockInfo?.stockNews | async as stockNews; else loadingNews"
+      >
+        <div
+          class="space-y-4 cursor-pointer"
+          *ngFor="let news of stockNews"
+          (click)="clickEntry(news.summary, news.url)"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div
+                class="w-6 h-6 rounded-full flex items-center justify-center mr-3"
+                [ngClass]="{
+                  'bg-red-500': news.sentiment_score <= 0.3,
+                  'bg-green-500': news.sentiment_score >= 0.3,
+                  'bg-gray-500': news.sentiment_score <= 0.3 && news.sentiment_score >= -0.3,
+                }"
+              >
+                <span class="text-white text-xs">!</span>
+              </div>
+              <p class="text-gray-300">{{ news.summary }}</p>
+              <a [href]="news.url" class="text-gray-500 p-1">[source]</a>
             </div>
-            <p class="text-gray-300">Netflix loses 500 customers</p>
           </div>
-          <span class="text-red-500">-$280.0</span>
         </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mr-3"
-            >
-              <span class="text-white text-xs">+</span>
-            </div>
-            <p class="text-gray-300">27 March 2020, at 15:30</p>
-          </div>
-          <span class="text-green-500">+$250</span>
-        </div>
-      </div>
+      </ng-container>
+      <ng-template #loadingNews>
+        <mat-spinner></mat-spinner>
+      </ng-template>
     </div>
 
     <!-- Sector News -->
     <div>
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-white text-lg">Sector News</h3>
-        <span class="text-gray-400 text-sm">23 - 30 March 2020</span>
       </div>
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center mr-3"
-            >
-              <span class="text-white text-xs">-</span>
+      <ng-container
+        *ngIf="stockInfo?.sectorNews | async as sectorNews; else loadingSNews"
+      >
+        <div
+          class="space-y-4 cursor-pointer"
+          *ngFor="let news of sectorNews"
+          (click)="clickEntry(news.summary, news.url)"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div
+                class="w-6 h-6 rounded-full flex items-center justify-center mr-3"
+                [ngClass]="{
+                  'bg-red-500': news.sentiment_score <= 0.3,
+                  'bg-green-500': news.sentiment_score >= 0.3,
+                  'bg-gray-500': news.sentiment_score <= 0.3 && news.sentiment_score >= -0.3,
+                }"
+              >
+                <span class="text-white text-xs">!</span>
+              </div>
+              <p class="text-gray-300">{{ news.summary }}</p>
+              <a [href]="news.url" class="text-gray-500 p-1">[source]</a>
             </div>
-            <p class="text-gray-300">Netflix loses 500 customers</p>
           </div>
-          <span class="text-red-500">-$250.0</span>
         </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mr-3"
-            >
-              <span class="text-white text-xs">+</span>
-            </div>
-            <p class="text-gray-300">27 March 2020, at 15:30</p>
-          </div>
-          <span class="text-green-500">+$370</span>
-        </div>
-      </div>
+      </ng-container>
+      <ng-template #loadingSNews>
+        <mat-spinner></mat-spinner>
+      </ng-template>
     </div>
   </div>
 </div>
